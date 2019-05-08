@@ -6,6 +6,7 @@ import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
@@ -35,6 +36,7 @@ public class TickSeekBar extends View {
     private static final int THUMB_MAX_WIDTH = 30;
     private Context mContext;
     private Paint mStockPaint;//the paint for seek bar drawing
+    private Paint mStrokePaint;//the paint for seek bar stroke drawing
     private TextPaint mTextPaint;//the paint for mTickTextsArr drawing
     private OnSeekChangeListener mSeekChangeListener;
     private Rect mRect;
@@ -77,6 +79,7 @@ public class TickSeekBar extends View {
     private int mTicksCount;//the num of tickMarks
     private int mUnSelectedTickMarksColor;//the color for the tickMarks those thumb haven't reach.
     private int mSelectedTickMarksColor;//the color for the tickMarks those thumb swept.
+    private int[] mTickColors; //the color for the tickMarks from the seekbar's start to end.
     private float mTickRadius;//the tick's radius
     private Bitmap mUnselectedTickMarksBitmap;//the drawable bitmap for tick
     private Bitmap mSelectTickMarksBitmap;//the drawable bitmap for tick
@@ -218,6 +221,22 @@ public class TickSeekBar extends View {
         mBackgroundTrack = new RectF();
         initDefaultPadding();
 
+        mTickColors = new int[mTicksCount];
+        for (int i = 0; i < mTicksCount; i++) {
+            switch (i) {
+                case 0:
+                    mTickColors[i] = Color.parseColor("#cdaf13");
+                    break;
+                case 1:
+                    mTickColors[i] = Color.parseColor("#999999");
+                    break;
+                case 2:
+                    mTickColors[i] = Color.parseColor("#d15759");
+                    break;
+                default:
+                    mTickColors[i] = Color.parseColor("#333333");
+            }
+        }
     }
 
     private void collectTicksInfo() {
@@ -272,6 +291,11 @@ public class TickSeekBar extends View {
         mStockPaint.setAntiAlias(true);
         if (mBackgroundTrackSize > mProgressTrackSize) {
             mProgressTrackSize = mBackgroundTrackSize;
+        }
+        if (mStrokePaint == null) {
+            mStrokePaint = new Paint();
+            mStrokePaint.setStyle(Paint.Style.STROKE);
+            mStrokePaint.setStrokeWidth(getContext().getResources().getDisplayMetrics().density * 1);
         }
     }
 
@@ -490,6 +514,10 @@ public class TickSeekBar extends View {
             }
             if (mShowTickMarksType == TickMarkType.OVAL) {
                 canvas.drawCircle(mTickMarksX[i], mProgressTrack.top, mTickRadius, mStockPaint);
+            } else if (mShowTickMarksType == TickMarkType.RING) {
+                mStrokePaint.setColor(mTickColors[i]);
+                canvas.drawCircle(mTickMarksX[i], mProgressTrack.top, mTickRadius, mStockPaint);
+                canvas.drawCircle(mTickMarksX[i], mProgressTrack.top, mTickRadius, mStrokePaint);
             } else if (mShowTickMarksType == TickMarkType.DIVIDER) {
                 float dividerTickHeight;
                 int rectWidth = SizeUtils.dp2px(mContext, 1);

@@ -21,4 +21,8 @@ public interface TickMarkType {
      * show tickMarks shape as vertical line , line'size is 2 dp.
      */
     int DIVIDER = 3;
+    /**
+     * show tickMarks shape as a ring , stroke size is 1 dp.
+     */
+    int RING = 5;
 }
