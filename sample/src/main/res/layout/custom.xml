@@ -96,9 +96,35 @@
 
         <TextView
             style="@style/subtitle_text_style"
-            android:text="7. thumbAutoAdjust = false" />
+            android:text="7. tsb_tick_progress_array from xml" />
 
         <com.warkiz.tickseekbar.TickSeekBar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:tsb_min="0"
+            app:tsb_max="120"
+            app:tsb_seek_smoothly="true"
+            app:tsb_show_tick_marks_type="ring"
+            app:tsb_show_tick_texts="below"
+            app:tsb_tick_progress_array="@array/custom_progress_ticks"
+            app:tsb_show_thumb_text="above"
+            app:tsb_tick_marks_size="16dp"
+            app:tsb_tick_marks_color="#ffffff"
+            app:tsb_track_background_size="1dp"
+            app:tsb_track_progress_size="1dp"
+            app:tsb_track_background_color="#dddddd"
+            app:tsb_track_progress_color="#dddddd"
+            app:tsb_thumb_drawable="@drawable/ic_crop_free"
+            app:tsb_thumb_color="#8c181b"
+            app:tsb_thumb_size="20dp"
+            app:tsb_thumb_adjust_auto="false" />
+
+        <TextView
+            style="@style/subtitle_text_style"
+            android:text="8. tsb_tick_progress_array from code" />
+
+        <com.warkiz.tickseekbar.TickSeekBar
+            android:id="@+id/custom_seek_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:tsb_min="0"
@@ -113,11 +139,10 @@
             app:tsb_track_progress_size="1dp"
             app:tsb_track_background_color="#dddddd"
             app:tsb_track_progress_color="#dddddd"
-            app:tsb_thumb_drawable="@drawable/ic_crop_free"
+            app:tsb_thumb_drawable="@drawable/ic_pause_circle"
             app:tsb_thumb_color="#8c181b"
             app:tsb_thumb_size="20dp"
-            app:tsb_thumb_adjust_auto="false"
-            app:tsb_ticks_count="3" />
+            app:tsb_thumb_adjust_auto="true" />
 
         <include layout="@layout/source_code_link" />
 

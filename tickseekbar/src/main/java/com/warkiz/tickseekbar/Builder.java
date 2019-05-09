@@ -50,6 +50,7 @@ public class Builder {
     ColorStateList tickTextsColorStateList = null;
     //tickMarks
     int tickCount = 0;
+    int[] tickProgressArray = null;
     int showTickMarksType = TickMarkType.NONE;
     int tickMarksColor = Color.parseColor("#FF4081");
     int tickMarksSize;
@@ -411,6 +412,11 @@ public class Builder {
      */
     public Builder tickCount(int tickCount) {
         this.tickCount = tickCount;
+        return this;
+    }
+
+    public Builder tickProgress(int[] progress) {
+        this.tickProgressArray = progress;
         return this;
     }
 

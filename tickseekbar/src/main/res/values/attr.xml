@@ -60,5 +60,6 @@
             <enum name="sans" value="2" />
             <enum name="serif" value="3" />
         </attr>
+        <attr name="tsb_tick_progress_array" format="reference" /><!--set arbitrary progress text, work on seekBar type :DISCRETE_TICKS_TEXTS-->
     </declare-styleable>
 </resources>

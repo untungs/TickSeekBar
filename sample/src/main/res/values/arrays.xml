@@ -44,5 +44,10 @@
         <item>last</item>
         <item>next</item>
     </array>
+    <integer-array name="custom_progress_ticks">
+        <item>17</item>
+        <item>58</item>
+        <item>107</item>
+    </integer-array>
 
 </resources>

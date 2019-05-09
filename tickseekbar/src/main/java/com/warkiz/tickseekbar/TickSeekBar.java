@@ -174,6 +174,7 @@ public class TickSeekBar extends View {
         mThumbTextColor = ta.getColor(R.styleable.TickSeekBar_tsb_thumb_text_color, builder.thumbTextColor);
         //tickMarks
         mTicksCount = ta.getInt(R.styleable.TickSeekBar_tsb_ticks_count, builder.tickCount);
+        initTickProgressArray(ta.getResourceId(R.styleable.TickSeekBar_tsb_tick_progress_array, 0), builder.tickProgressArray);
         mShowTickMarksType = ta.getInt(R.styleable.TickSeekBar_tsb_show_tick_marks_type, builder.showTickMarksType);
         mTickMarksSize = ta.getDimensionPixelSize(R.styleable.TickSeekBar_tsb_tick_marks_size, builder.tickMarksSize);
         initTickMarksColor(ta.getColorStateList(R.styleable.TickSeekBar_tsb_tick_marks_color), builder.tickMarksColor);
@@ -249,12 +250,8 @@ public class TickSeekBar extends View {
                 mTextCenterX = new float[mTicksCount];
                 mTickTextsWidth = new float[mTicksCount];
             }
-            mProgressArr = new float[mTicksCount];
-            if (mShowTickMarksType == TickMarkType.RING) {
-                mProgressArr[0] = 17;
-                mProgressArr[1] = 56;
-                mProgressArr[2] = 107;
-            } else {
+            if (mProgressArr == null) {
+                mProgressArr = new float[mTicksCount];
                 for (int i = 0; i < mProgressArr.length; i++) {
                     mProgressArr[i] = mMin + i * (mMax - mMin) / ((mTicksCount - 1) > 0 ? (mTicksCount - 1) : 1);
                 }
@@ -521,7 +518,11 @@ public class TickSeekBar extends View {
             if (mShowTickMarksType == TickMarkType.OVAL) {
                 canvas.drawCircle(mTickMarksX[i], mProgressTrack.top, mTickRadius, mStockPaint);
             } else if (mShowTickMarksType == TickMarkType.RING) {
-                mStrokePaint.setColor(mTickColors[i]);
+                if (mTickColors.length > 0) {
+                    mStrokePaint.setColor(mTickColors[i]);
+                } else {
+                    mStrokePaint.setColor(mSelectedTextsColor);
+                }
                 canvas.drawCircle(mTickMarksX[i], mProgressTrack.top, mTickRadius, mStockPaint);
                 canvas.drawCircle(mTickMarksX[i], mProgressTrack.top, mTickRadius, mStrokePaint);
             } else if (mShowTickMarksType == TickMarkType.DIVIDER) {
@@ -764,6 +765,23 @@ public class TickSeekBar extends View {
             throw new IllegalArgumentException("the selector color file you set for the argument: isb_thumb_color is in wrong format.");
         }
 
+    }
+
+    private void initTickProgressArray(int resourceId, int[] defaultProgress) {
+        if (resourceId != 0) {
+            int[] progress = getResources().getIntArray(resourceId);
+            setProgressArray(progress);
+        } else if (defaultProgress != null) {
+            setProgressArray(defaultProgress);
+        }
+    }
+
+    private void setProgressArray(int[] progress) {
+        mProgressArr = new float[progress.length];
+        for (int i = 0; i < progress.length; i++) {
+            mProgressArr[i] = (float) progress[i];
+        }
+        mTicksCount = progress.length;
     }
 
     /**
@@ -1812,6 +1830,27 @@ public class TickSeekBar extends View {
             throw new IllegalArgumentException("the Argument: TICK COUNT must be limited between (0-50), Now is " + mTicksCount);
         }
         mTicksCount = tickCount;
+        mProgressArr = null;
+        collectTicksInfo();
+        initTextsArray();
+        initSeekBarInfo();
+        refreshSeekBarLocation();
+        invalidate();
+    }
+
+    /**
+     * Sets the progress array
+     *
+     * @param progress progress array
+     */
+    public synchronized void setTickProgressArray(int[] progress) {
+        if (mTicksCount < 0 || mTicksCount > 50) {
+            throw new IllegalArgumentException("the Argument: TICK COUNT must be limited between (0-50), Now is " + mTicksCount);
+        }
+        if (progress == null) {
+            throw new IllegalArgumentException("the Argument: progress must not be null");
+        }
+        setProgressArray(progress);
         collectTicksInfo();
         initTextsArray();
         initSeekBarInfo();
