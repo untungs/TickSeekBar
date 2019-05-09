@@ -110,6 +110,7 @@
             app:tsb_show_thumb_text="above"
             app:tsb_tick_marks_size="16dp"
             app:tsb_tick_marks_color="#ffffff"
+            app:tsb_tick_color_array="@array/custom_tick_colors"
             app:tsb_track_background_size="1dp"
             app:tsb_track_progress_size="1dp"
             app:tsb_track_background_color="#dddddd"

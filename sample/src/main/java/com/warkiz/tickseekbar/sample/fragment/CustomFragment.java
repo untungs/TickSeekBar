@@ -1,5 +1,6 @@
 package com.warkiz.tickseekbar.sample.fragment;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -25,5 +26,11 @@ public class CustomFragment extends BaseFragment {
 
         TickSeekBar seekBar = view.findViewById(R.id.custom_seek_bar);
         seekBar.setTickProgressArray(new int[]{0, 17, 56, 108});
+        seekBar.tickColorArray(new int[]{
+                Color.parseColor("#cdaf13"),
+                Color.parseColor("#999999"),
+                Color.parseColor("#d15759"),
+                Color.parseColor("#333333")
+        });
     }
 }

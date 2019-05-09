@@ -178,6 +178,7 @@ public class TickSeekBar extends View {
         mShowTickMarksType = ta.getInt(R.styleable.TickSeekBar_tsb_show_tick_marks_type, builder.showTickMarksType);
         mTickMarksSize = ta.getDimensionPixelSize(R.styleable.TickSeekBar_tsb_tick_marks_size, builder.tickMarksSize);
         initTickMarksColor(ta.getColorStateList(R.styleable.TickSeekBar_tsb_tick_marks_color), builder.tickMarksColor);
+        initTickColorArray(ta.getResourceId(R.styleable.TickSeekBar_tsb_tick_color_array, 0), builder.tickColorArray);
         mTickMarksDrawable = ta.getDrawable(R.styleable.TickSeekBar_tsb_tick_marks_drawable);
         mTickMarksSweptHide = ta.getBoolean(R.styleable.TickSeekBar_tsb_tick_marks_swept_hide, builder.tickMarksSweptHide);
         mTickMarksEndsHide = ta.getBoolean(R.styleable.TickSeekBar_tsb_tick_marks_ends_hide, builder.tickMarksEndsHide);
@@ -221,23 +222,6 @@ public class TickSeekBar extends View {
         mProgressTrack = new RectF();
         mBackgroundTrack = new RectF();
         initDefaultPadding();
-
-        mTickColors = new int[mTicksCount];
-        for (int i = 0; i < mTicksCount; i++) {
-            switch (i) {
-                case 0:
-                    mTickColors[i] = Color.parseColor("#cdaf13");
-                    break;
-                case 1:
-                    mTickColors[i] = Color.parseColor("#999999");
-                    break;
-                case 2:
-                    mTickColors[i] = Color.parseColor("#d15759");
-                    break;
-                default:
-                    mTickColors[i] = Color.parseColor("#333333");
-            }
-        }
     }
 
     private void collectTicksInfo() {
@@ -495,7 +479,9 @@ public class TickSeekBar extends View {
             if (i == getThumbPosOnTick() && mTicksCount > 2 && !mSeekSmoothly) {
                 continue;
             }
-            if (i <= thumbPosFloat) {
+            if (mTickColors != null && mTickColors.length > 0 && mShowTickMarksType != TickMarkType.RING) {
+                mStockPaint.setColor(mTickColors[i % mTickColors.length]);
+            } else if (i <= thumbPosFloat) {
                 mStockPaint.setColor(getLeftSideTickColor());
             } else {
                 mStockPaint.setColor(getRightSideTickColor());
@@ -518,8 +504,8 @@ public class TickSeekBar extends View {
             if (mShowTickMarksType == TickMarkType.OVAL) {
                 canvas.drawCircle(mTickMarksX[i], mProgressTrack.top, mTickRadius, mStockPaint);
             } else if (mShowTickMarksType == TickMarkType.RING) {
-                if (mTickColors.length > 0) {
-                    mStrokePaint.setColor(mTickColors[i]);
+                if (mTickColors != null && mTickColors.length > 0) {
+                    mStrokePaint.setColor(mTickColors[i % mTickColors.length]);
                 } else {
                     mStrokePaint.setColor(mSelectedTextsColor);
                 }
@@ -854,6 +840,14 @@ public class TickSeekBar extends View {
         } else {
             //the color selector file was set by a wrong format , please see above to correct.
             throw new IllegalArgumentException("the selector color file you set for the argument: isb_tick_marks_color is in wrong format.");
+        }
+    }
+
+    private void initTickColorArray(int resourceId, int[] defaultTickColors) {
+        if (resourceId != 0) {
+            mTickColors = getResources().getIntArray(resourceId);
+        } else if (defaultTickColors != null) {
+            mTickColors = defaultTickColors;
         }
     }
 
@@ -1692,6 +1686,11 @@ public class TickSeekBar extends View {
     //</selector>
     public void tickMarksColor(@NonNull ColorStateList tickMarksColorStateList) {
         initTickMarksColor(tickMarksColorStateList, mSelectedTickMarksColor);
+        invalidate();
+    }
+
+    public void tickColorArray(int[] colors) {
+        mTickColors = colors;
         invalidate();
     }
 

@@ -61,5 +61,6 @@
             <enum name="serif" value="3" />
         </attr>
         <attr name="tsb_tick_progress_array" format="reference" /><!--set arbitrary progress text, work on seekBar type :DISCRETE_TICKS_TEXTS-->
+        <attr name="tsb_tick_color_array" format="reference" /><!--set tick color array, work on seekBar type :DISCRETE_TICKS_TEXTS-->
     </declare-styleable>
 </resources>

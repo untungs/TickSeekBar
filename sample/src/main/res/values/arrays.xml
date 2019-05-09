@@ -50,4 +50,10 @@
         <item>107</item>
     </integer-array>
 
+    <array name="custom_tick_colors">
+        <item>#cdaf13</item>
+        <item>#999999</item>
+        <item>#d15759</item>
+    </array>
+
 </resources>

@@ -53,6 +53,7 @@ public class Builder {
     int[] tickProgressArray = null;
     int showTickMarksType = TickMarkType.NONE;
     int tickMarksColor = Color.parseColor("#FF4081");
+    int[] tickColorArray = null;
     int tickMarksSize;
     Drawable tickMarksDrawable = null;
     boolean tickMarksEndsHide = false;
@@ -442,6 +443,11 @@ public class Builder {
      */
     public Builder tickMarksColor(@ColorInt int tickMarksColor) {
         this.tickMarksColor = tickMarksColor;
+        return this;
+    }
+
+    public Builder tickColorArray(int[] tickColorArray) {
+        this.tickColorArray = tickColorArray;
         return this;
     }
 
