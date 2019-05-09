@@ -101,6 +101,8 @@
         <com.warkiz.tickseekbar.TickSeekBar
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:tsb_min="0"
+            app:tsb_max="120"
             app:tsb_seek_smoothly="true"
             app:tsb_show_tick_marks_type="ring"
             app:tsb_show_tick_texts="below"
@@ -111,11 +113,11 @@
             app:tsb_track_progress_size="1dp"
             app:tsb_track_background_color="#dddddd"
             app:tsb_track_progress_color="#dddddd"
-            app:tsb_thumb_drawable="@drawable/ic_pause_circle"
+            app:tsb_thumb_drawable="@drawable/ic_crop_free"
             app:tsb_thumb_color="#8c181b"
             app:tsb_thumb_size="20dp"
             app:tsb_thumb_adjust_auto="false"
-            app:tsb_ticks_count="5" />
+            app:tsb_ticks_count="3" />
 
         <include layout="@layout/source_code_link" />
 

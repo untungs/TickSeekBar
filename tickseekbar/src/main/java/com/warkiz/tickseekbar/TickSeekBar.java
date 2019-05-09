@@ -250,8 +250,14 @@ public class TickSeekBar extends View {
                 mTickTextsWidth = new float[mTicksCount];
             }
             mProgressArr = new float[mTicksCount];
-            for (int i = 0; i < mProgressArr.length; i++) {
-                mProgressArr[i] = mMin + i * (mMax - mMin) / ((mTicksCount - 1) > 0 ? (mTicksCount - 1) : 1);
+            if (mShowTickMarksType == TickMarkType.RING) {
+                mProgressArr[0] = 17;
+                mProgressArr[1] = 56;
+                mProgressArr[2] = 107;
+            } else {
+                for (int i = 0; i < mProgressArr.length; i++) {
+                    mProgressArr[i] = mMin + i * (mMax - mMin) / ((mTicksCount - 1) > 0 ? (mTicksCount - 1) : 1);
+                }
             }
 
         }
@@ -295,7 +301,7 @@ public class TickSeekBar extends View {
         if (mStrokePaint == null) {
             mStrokePaint = new Paint();
             mStrokePaint.setStyle(Paint.Style.STROKE);
-            mStrokePaint.setStrokeWidth(getContext().getResources().getDisplayMetrics().density * 1);
+            mStrokePaint.setStrokeWidth(SizeUtils.dp2px(mContext, 1));
         }
     }
 
@@ -356,9 +362,9 @@ public class TickSeekBar extends View {
                 mTickTextsArr[i] = getTickTextByPosition(i);
                 mTextPaint.getTextBounds(mTickTextsArr[i], 0, mTickTextsArr[i].length(), mRect);
                 mTickTextsWidth[i] = mRect.width();
-                mTextCenterX[i] = mPaddingLeft + mSeekBlockLength * i;
+                mTextCenterX[i] = mPaddingLeft + mProgressArr[i] / mMax * mSeekLength;
             }
-            mTickMarksX[i] = mPaddingLeft + mSeekBlockLength * i;
+            mTickMarksX[i] = mPaddingLeft + mProgressArr[i] / mMax * mSeekLength;
         }
 
     }
@@ -550,10 +556,12 @@ public class TickSeekBar extends View {
             if (mR2L) {
                 index = mTickTextsArr.length - 1 - i;
             }
-            if (i == 0) {
-                canvas.drawText(mTickTextsArr[index], mTextCenterX[i] + mTickTextsWidth[index] / 2.0f, mTickTextY, mTextPaint);
-            } else if (i == mTickTextsArr.length - 1) {
-                canvas.drawText(mTickTextsArr[index], mTextCenterX[i] - mTickTextsWidth[index] / 2.0f, mTickTextY, mTextPaint);
+            float textLeft = mTextCenterX[i] - mTickTextsWidth[index] / 2.0f;
+            float textRight = mTextCenterX[i] + mTickTextsWidth[index] / 2.0f;
+            if (textLeft <= mPaddingLeft) {
+                canvas.drawText(mTickTextsArr[index], textRight, mTickTextY, mTextPaint);
+            } else if (textRight > mPaddingLeft + mSeekLength) {
+                canvas.drawText(mTickTextsArr[index], textLeft, mTickTextY, mTextPaint);
             } else {
                 canvas.drawText(mTickTextsArr[index], mTextCenterX[i], mTickTextY, mTextPaint);
             }
@@ -1366,8 +1374,16 @@ public class TickSeekBar extends View {
         //make sure the seek bar to seek smoothly always
         // while the tick's count is less than 3(tick's count is 1 or 2.).
         if (mTicksCount > 2 && !mSeekSmoothly) {
-            int touchBlockSize = Math.round((touchX - mPaddingLeft) / mSeekBlockLength);
-            touchXTemp = mSeekBlockLength * touchBlockSize + mPaddingLeft;
+            float leftTickX = mTickMarksX[0];
+            float rightTickX = mTickMarksX[0];
+            for (float x : mTickMarksX) {
+                rightTickX = x;
+                if (touchX < x)
+                    break;
+                leftTickX = x;
+            }
+            float touchBlockPercent = (touchX - leftTickX) / (rightTickX - leftTickX);
+            touchXTemp = Math.round(touchBlockPercent) > 0 ? rightTickX : leftTickX;
         }
         if (mR2L) {
             return mSeekLength - touchXTemp + 2 * mPaddingLeft;
