@@ -281,9 +281,10 @@ public class TickSeekBar extends View {
         }
         if (mStrokePaint == null) {
             mStrokePaint = new Paint();
-            mStrokePaint.setStyle(Paint.Style.STROKE);
-            mStrokePaint.setStrokeWidth(SizeUtils.dp2px(mContext, 1));
         }
+        mStrokePaint.setAntiAlias(true);
+        mStrokePaint.setStyle(Paint.Style.STROKE);
+        mStrokePaint.setStrokeWidth(SizeUtils.dp2px(mContext, 1));
     }
 
     @Override
