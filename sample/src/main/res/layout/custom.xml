@@ -143,7 +143,13 @@
             app:tsb_thumb_drawable="@drawable/ic_pause_circle"
             app:tsb_thumb_color="#8c181b"
             app:tsb_thumb_size="20dp"
-            app:tsb_thumb_adjust_auto="true" />
+            app:tsb_thumb_adjust_auto="false" />
+
+        <Button
+            android:id="@+id/buttonChange"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="change" />
 
         <include layout="@layout/source_code_link" />
 

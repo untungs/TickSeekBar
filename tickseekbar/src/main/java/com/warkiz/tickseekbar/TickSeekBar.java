@@ -344,9 +344,9 @@ public class TickSeekBar extends View {
                 mTickTextsArr[i] = getTickTextByPosition(i);
                 mTextPaint.getTextBounds(mTickTextsArr[i], 0, mTickTextsArr[i].length(), mRect);
                 mTickTextsWidth[i] = mRect.width();
-                mTextCenterX[i] = mPaddingLeft + mProgressArr[i] / mMax * mSeekLength;
+                mTextCenterX[i] = mPaddingLeft + (mProgressArr[i] - mMin) / (mMax - mMin) * mSeekLength;
             }
-            mTickMarksX[i] = mPaddingLeft + mProgressArr[i] / mMax * mSeekLength;
+            mTickMarksX[i] = mPaddingLeft + (mProgressArr[i] - mMin) / (mMax - mMin) * mSeekLength;
         }
 
     }

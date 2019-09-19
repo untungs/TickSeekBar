@@ -24,13 +24,35 @@ public class CustomFragment extends BaseFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        TickSeekBar seekBar = view.findViewById(R.id.custom_seek_bar);
-        seekBar.setTickProgressArray(new int[]{0, 17, 56, 108});
+        final int[] defaultProgress = {0, 17, 56, 108};
+        final int[] newProgress = {-90, 22, 80, 111};
+
+        final TickSeekBar seekBar = view.findViewById(R.id.custom_seek_bar);
+        seekBar.setTickProgressArray(defaultProgress);
+        seekBar.setMax(120);
         seekBar.tickColorArray(new int[]{
                 Color.parseColor("#cdaf13"),
                 Color.parseColor("#999999"),
                 Color.parseColor("#d15759"),
                 Color.parseColor("#333333")
+        });
+
+        view.findViewById(R.id.buttonChange).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Object tag = v.getTag();
+                boolean isNewProgress= tag != null && (boolean) tag;
+                if (isNewProgress) {
+                    seekBar.setTickProgressArray(defaultProgress);
+                    seekBar.setMax(120);
+                    seekBar.setMin(0);
+                } else {
+                    seekBar.setTickProgressArray(newProgress);
+                    seekBar.setMax(250);
+                    seekBar.setMin(-100);
+                }
+                v.setTag(!isNewProgress);
+            }
         });
     }
 }
